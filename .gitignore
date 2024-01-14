@@ -1,0 +1,8 @@
+.idea
+.cache
+*build*/
+compile_commands.json
+run-clang-format.py
+
+subprojects/*/
+!subprojects/packagefiles/
