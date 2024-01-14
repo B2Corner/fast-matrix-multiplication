@@ -5,22 +5,6 @@
 #include "src/multipliers/multiplier_strassen.h"
 
 std::string nice_str(size_t num) {
-    /*if(num < 1'000'000)
-        return std::to_string(num);
-
-    std::string str = std::to_string(num);
-    size_t e_power = str.size() - 1;
-    if(str[6] >= '5') {
-        std::string new_str = std::to_string(std::stoi(str.substr(0, 7)) + 1);
-        if(new_str.size() == 8) {
-            new_str = new_str.substr(0, 7);
-            e_power++;
-        }
-        return new_str.substr(0, 1) + "." + new_str.substr(1, 6) + "e" + std::to_string(e_power);
-    } else {
-        return str.substr(0, 1) + "." + str.substr(1, 6) + "e" + std::to_string(e_power);
-    }*/
-
     std::stringstream stream;
     stream << std::setprecision(6);
     stream << static_cast<double>(num);
