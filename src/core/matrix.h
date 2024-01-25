@@ -133,7 +133,7 @@ public:
         allocate_data();
 
         for(size_t i = 0; i < height_; i++)
-            for(int32_t j = 0; j < width_; j++)
+            for(size_t j = 0; j < width_; j++)
                 data_[i][j] = static_cast<T>(other[i][j]);
     }
 

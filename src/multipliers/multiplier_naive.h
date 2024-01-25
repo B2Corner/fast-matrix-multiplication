@@ -12,7 +12,7 @@ public:
     void multiply_tiles(MatrixTile<T> res, const MatrixTile<T>& m1, const MatrixTile<T>& m2) override {
         for(size_t i = 0; i < m1.get_height(); i++)
             for(size_t j = 0; j < m2.get_width(); j++)
-                res[i][j] = static_cast<T>(0);
+                res[i][j] = T(0);
 
         for(size_t i = 0; i < m1.get_height(); i++)
             for(size_t j = 0; j < m1.get_width(); j++) {

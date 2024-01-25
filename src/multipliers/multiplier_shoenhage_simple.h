@@ -173,7 +173,7 @@ private:
                                   Matrix<Poly<T>>* scratchpads_left, Matrix<Poly<T>>* scratchpads_right, Matrix<Poly<T>>* scratchpads_res) {
         for(size_t i = 0; i < m1.get_height(); i++)
             for(size_t j = 0; j < m2.get_width(); j++)
-                res[i][j] = static_cast<Poly<T>>(0);
+                res[i][j] = Poly<T>(0);
         multiply_tiles_add(res, 0, m1, m2, scratchpads_left, scratchpads_right, scratchpads_res);
     }
 

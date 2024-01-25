@@ -174,7 +174,7 @@ private:
 
         if(m2.get_width() % 2 == 1) {
             for(size_t i = 0; i < 2 * height_part_left; i++) {
-                res[i][m2.get_width() - 1] = static_cast<T>(0);
+                res[i][m2.get_width() - 1] = T(0);
                 for(size_t j = 0; j < m1.get_width(); j++)
                     res[i][m2.get_width() - 1] += m1[i][j] * m2[j][m2.get_width() - 1];
             }
@@ -182,7 +182,7 @@ private:
 
         if(m1.get_height() % 2 == 1) {
             for(size_t j = 0; j < m2.get_width(); j++) {
-                res[m1.get_height() - 1][j] = static_cast<T>(0);
+                res[m1.get_height() - 1][j] = T(0);
                 for(size_t i = 0; i < m1.get_width(); i++)
                     res[m1.get_height() - 1][j] += m1[m1.get_height() - 1][i] * m2[i][j];
             }

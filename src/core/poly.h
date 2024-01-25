@@ -25,7 +25,7 @@ public:
             for(int64_t i = 0; i < shift; i++)
                 res.data_.insert(res.data_.begin(), T(0));
             return res;
-        } else if(-shift < data_.size()) {
+        } else if(static_cast<size_t>(-shift) < data_.size()) {
             Poly<T> res;
             res.data_ = {data_.begin() + (-shift), data_.end()};
             return res;
@@ -34,33 +34,19 @@ public:
         }
     }
 
-    Poly<T> operator+(const Poly<T>& other) const {
-        Poly<T> res;
-        res.data_.resize(std::max(data_.size(), other.data_.size()), T(0));
-        for(size_t i = 0; i < data_.size(); i++)
-            res.data_[i] += data_[i];
-        for(size_t i = 0; i < other.data_.size(); i++)
-            res.data_[i] += other.data_[i];
-        return res;
-    }
-
     Poly<T>& operator+=(const Poly& other) {
-        *this = *this + other;
+        if(data_.size() < other.data_.size())
+            data_.resize(other.data_.size());
+        for(size_t i = 0; i < other.data_.size(); i++)
+            data_[i] += other.data_[i];
         return *this;
     }
 
-    Poly<T> operator-(const Poly<T>& other) const {
-        Poly<T> res;
-        res.data_.resize(std::max(data_.size(), other.data_.size()), T(0));
-        for(size_t i = 0; i < data_.size(); i++)
-            res.data_[i] += data_[i];
-        for(size_t i = 0; i < other.data_.size(); i++)
-            res.data_[i] -= other.data_[i];
-        return res;
-    }
-
     Poly<T>& operator-=(const Poly& other) {
-        *this = *this - other;
+        if(data_.size() < other.data_.size())
+            data_.resize(other.data_.size());
+        for(size_t i = 0; i < other.data_.size(); i++)
+            data_[i] -= other.data_[i];
         return *this;
     }
 
@@ -118,3 +104,17 @@ private:
 
     std::vector<T> data_;
 };
+
+template<typename T>
+Poly<T> operator+(const Poly<T>& p1, const Poly<T>& p2) {
+    Poly<T> res = p1;
+    res += p2;
+    return res;
+}
+
+template<typename T>
+Poly<T> operator-(const Poly<T>& p1, const Poly<T>& p2) {
+    Poly<T> res = p1;
+    res -= p2;
+    return res;
+}
