@@ -19,16 +19,8 @@ public:
         std::vector<Matrix<Poly<T>>> scratchpads_res;
         generate_scratchpads(m1.get_height(), m1.get_width(), m2.get_width(), scratchpads_left, scratchpads_right, scratchpads_res);
 
-        Matrix<Poly<T>> m1_poly(m1.get_height(), m1.get_width());
-        for(size_t i = 0; i < m1.get_height(); i++)
-            for(size_t j = 0; j < m1.get_width(); j++)
-                m1_poly[i][j] = m1[i][j];
-
-        Matrix<Poly<T>> m2_poly(m2.get_height(), m2.get_width());
-        for(size_t i = 0; i < m2.get_height(); i++)
-            for(size_t j = 0; j < m2.get_width(); j++)
-                m2_poly[i][j] = m2[i][j];
-
+        Matrix<Poly<T>> m1_poly = m1;
+        Matrix<Poly<T>> m2_poly = m2;
         Matrix<Poly<T>> res_poly(m1.get_height(), m2.get_width());
         multiply_tiles_overwrite(res_poly, m1_poly, m2_poly, scratchpads_left.data(), scratchpads_right.data(), scratchpads_res.data());
 

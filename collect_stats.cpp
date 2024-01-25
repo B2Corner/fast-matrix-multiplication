@@ -4,6 +4,8 @@
 #include "src/multipliers/multiplier_shoenhage_simple.h"
 #include "src/multipliers/multiplier_strassen.h"
 
+namespace {
+
 std::string nice_str(size_t num) {
     std::stringstream stream;
     stream << std::setprecision(6);
@@ -26,6 +28,8 @@ void output_estimation_table_row(MatrixMultiplier<T>& multuplier, size_t size, s
     std::cout << operations_cnt_str << std::string(33 - operations_cnt_str.size(), ' ') << " | ";
     std::cout << get_ratio_with_naive(multuplier, size) << std::endl;
 }
+
+}  // namespace
 
 int main() {
     MatrixMultiplierNaive<int32_t> multiplier_naive;

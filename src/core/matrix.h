@@ -123,9 +123,13 @@ public:
     }
 
     template<typename U>
-    Matrix(const Matrix<U>& other) {
-        height_ = other.height_;
-        width_ = other.width_;
+    Matrix(const Matrix<U>& other) : Matrix(other.get_tile(0, 0, other.get_height(), other.get_width())) {
+    }
+
+    template<typename U>
+    Matrix(const MatrixTile<U>& other) {
+        height_ = other.get_height();
+        width_ = other.get_width();
         allocate_data();
 
         for(size_t i = 0; i < height_; i++)

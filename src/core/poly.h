@@ -23,7 +23,7 @@ public:
         if(shift > 0) {
             Poly<T> res = *this;
             for(int64_t i = 0; i < shift; i++)
-                res.data_.insert(res.data_.begin(), static_cast<T>(0));
+                res.data_.insert(res.data_.begin(), T(0));
             return res;
         } else if(-shift < data_.size()) {
             Poly<T> res;
@@ -36,7 +36,7 @@ public:
 
     Poly<T> operator+(const Poly<T>& other) const {
         Poly<T> res;
-        res.data_.resize(std::max(data_.size(), other.data_.size()), static_cast<T>(0));
+        res.data_.resize(std::max(data_.size(), other.data_.size()), T(0));
         for(size_t i = 0; i < data_.size(); i++)
             res.data_[i] += data_[i];
         for(size_t i = 0; i < other.data_.size(); i++)
@@ -51,7 +51,7 @@ public:
 
     Poly<T> operator-(const Poly<T>& other) const {
         Poly<T> res;
-        res.data_.resize(std::max(data_.size(), other.data_.size()), static_cast<T>(0));
+        res.data_.resize(std::max(data_.size(), other.data_.size()), T(0));
         for(size_t i = 0; i < data_.size(); i++)
             res.data_[i] += data_[i];
         for(size_t i = 0; i < other.data_.size(); i++)
@@ -68,7 +68,7 @@ public:
     Poly<T> operator*(const Poly<T>& other) const {
         if(data_.size() == 1 || other.data_.size() == 1) {
             Poly<T> res;
-            res.data_.resize(data_.size() + other.data_.size() - 1, static_cast<T>(0));
+            res.data_.resize(data_.size() + other.data_.size() - 1, T(0));
             for(size_t i = 0; i < data_.size(); i++)
                 for(size_t j = 0; j < other.data_.size(); j++)
                     res.data_[i + j] += data_[i] * other.data_[j];
@@ -86,7 +86,7 @@ public:
             Poly<T> r1 = r3 - r0 - r2;
 
             Poly<T> res;
-            res.data_.resize(data_.size() + other.data_.size() - 1, static_cast<T>(0));
+            res.data_.resize(data_.size() + other.data_.size() - 1, T(0));
             res += r0;
             res += r1.power_shift(left_size);
             res += r2.power_shift(2 * left_size);
