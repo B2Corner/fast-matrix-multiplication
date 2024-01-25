@@ -1,0 +1,15 @@
+BasedOnStyle: Google
+IndentWidth: 4
+
+Language: Cpp
+PointerAlignment: Left
+ColumnLimit: 140
+SpaceAfterTemplateKeyword: false
+SpaceBeforeParens: Never
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: None
+AllowShortLoopsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+SortIncludes: false
+IndentAccessModifiers: false
+AccessModifierOffset: -4
