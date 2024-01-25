@@ -37,6 +37,11 @@ public:
         mul_counter++;
         return {val_ * other.val_};
     }
+
+    OperationsCounter operator*=(const OperationsCounter& other) {
+        mul_counter++;
+        val_ *= other.val_;
+    }
 };
 
 template<typename T>

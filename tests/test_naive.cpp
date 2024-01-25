@@ -70,28 +70,14 @@ TEST_CASE("Naive multiplication benchmark") {
     };
     MatrixMultiplierNaive<int32_t> multiplier_naive;
 
-    setup_square(64);
-    BENCHMARK("64 x 64 x 64") {
-        return multiplier_naive.multiply(m1, m2);
-    };
+    std::array<size_t, 5> sizes = {64, 128, 256, 512, 1024};
+    for(size_t size : sizes) {
+        std::string benchmark_name = std::to_string(size);
+        benchmark_name = benchmark_name + " x " + benchmark_name + " x " + benchmark_name;
 
-    setup_square(128);
-    BENCHMARK("128 x 128 x 128") {
-        return multiplier_naive.multiply(m1, m2);
-    };
-
-    setup_square(256);
-    BENCHMARK("256 x 256 x 256") {
-        return multiplier_naive.multiply(m1, m2);
-    };
-
-    setup_square(512);
-    BENCHMARK("512 x 512 x 512") {
-        return multiplier_naive.multiply(m1, m2);
-    };
-
-    setup_square(1024);
-    BENCHMARK("1024 x 1024 x 1024") {
-        return multiplier_naive.multiply(m1, m2);
-    };
+        setup_square(size);
+        BENCHMARK(benchmark_name.c_str()) {
+            return multiplier_naive.multiply(m1, m2);
+        };
+    }
 }

@@ -10,13 +10,9 @@ public:
     Poly() : data_{0} {
     }
 
-    Poly(T x) : Poly() {
-        data_ = {x};
-    }
-
-    Poly& operator=(T x) {
-        data_[0] = x;
-        return *this;
+    Poly(T x) {
+        data_.reserve(1);
+        data_.push_back(std::move(x));
     }
 
     size_t degree() const {
@@ -99,7 +95,7 @@ public:
         }
     }
 
-    T evaluate_at_0() {
+    T evaluate_at_0() const {
         return data_[0];
     }
 
@@ -117,8 +113,8 @@ public:
     }
 
 private:
-    std::vector<T> data_;
-
     Poly(const std::vector<T>::const_iterator& it1, const std::vector<T>::const_iterator& it2) : data_(it1, it2) {
     }
+
+    std::vector<T> data_;
 };

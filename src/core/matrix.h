@@ -30,12 +30,12 @@ public:
     }
 
 private:
-    T* data_;
-    size_t width_;
-
     // Matrix row cannot be constructed directly, only by operator[] of Matrix
     MatrixTileRow(T* data, size_t width) : data_(data), width_(width) {
     }
+
+    T* data_;
+    size_t width_;
 };
 
 // A lighter version of matrix, in the sense it doesn't own the underlying memory
@@ -44,12 +44,9 @@ class MatrixTile {
     friend class Matrix<T>;
 
 public:
-    MatrixTile() : height_(0), width_(0), data_(nullptr), hor_shift_(0) {
-    }
+    MatrixTile() = default;
 
     // We are OK with default rule-of-5 implementation
-
-    // ---------- Operators ----------
 
     MatrixTileRow<T> operator[](size_t ind) {
         assert(ind < height_);
@@ -61,13 +58,13 @@ public:
         return {data_[ind] + hor_shift_, width_};
     }
 
-    // ---------- Tile getting  ----------
-
-    MatrixTile<T> get_tile(size_t row0, size_t col0, size_t tile_height, size_t tile_width) const {
+    MatrixTile<T> get_tile(size_t row0, size_t col0, size_t tile_height, size_t tile_width) {
         return {tile_height, tile_width, data_ + row0, hor_shift_ + col0};
     }
 
-    // ---------- Getters ----------
+    const MatrixTile<T> get_tile(size_t row0, size_t col0, size_t tile_height, size_t tile_width) const {
+        return {tile_height, tile_width, data_ + row0, hor_shift_ + col0};
+    }
 
     size_t get_width() const {
         return width_;
@@ -77,25 +74,22 @@ public:
         return height_;
     }
 
-    // ---------- Destructor ----------
-
     ~MatrixTile() = default;
 
 private:
-    size_t height_, width_;
-    T** data_;
-    size_t hor_shift_;
-
     MatrixTile(size_t height, size_t width, T** data, size_t hor_shift)
         : height_(height), width_(width), data_(data), hor_shift_(hor_shift) {
     }
+
+    size_t height_ = 0;
+    size_t width_ = 0;
+    T** data_ = nullptr;
+    size_t hor_shift_ = 0;
 };
 
 template<typename T>
 class Matrix {
 public:
-    // ---------- Constructors ----------
-
     Matrix() : height_(0), width_(0), data_(nullptr) {
     }
 
@@ -128,7 +122,16 @@ public:
         }
     }
 
-    // ---------- Rule of 5 ----------
+    template<typename U>
+    Matrix(const Matrix<U>& other) {
+        height_ = other.height_;
+        width_ = other.width_;
+        allocate_data();
+
+        for(size_t i = 0; i < height_; i++)
+            for(int32_t j = 0; j < width_; j++)
+                data_[i][j] = static_cast<T>(other[i][j]);
+    }
 
     Matrix& operator=(const Matrix& other) {
         if(this == &other)
@@ -172,8 +175,6 @@ public:
         *this = std::move(other);
     }
 
-    // ---------- Operators ----------
-
     MatrixTileRow<T> operator[](size_t ind) {
         assert(ind < height_);
         return {data_[ind], width_};
@@ -194,8 +195,6 @@ public:
         return true;
     }
 
-    // ---------- Tile getting  ----------
-
     MatrixTile<T> get_tile(size_t row0, size_t col0, size_t tile_height, size_t tile_width) const {
         return {tile_height, tile_width, data_ + row0, col0};
     }
@@ -203,8 +202,6 @@ public:
     operator MatrixTile<T>() const {
         return get_tile(0, 0, height_, width_);
     }
-
-    // ---------- Getters ----------
 
     size_t get_width() const {
         return width_;
@@ -214,8 +211,6 @@ public:
         return height_;
     }
 
-    // ---------- Destructor ----------
-
     ~Matrix() {
         if(data_ != nullptr)
             delete[] data_[0];
@@ -223,9 +218,6 @@ public:
     }
 
 private:
-    size_t height_, width_;
-    T** data_;
-
     // We need to handle OOM errors gracefully, so this is a separate function
     void allocate_data() {
         data_ = new T*[height_];
@@ -241,6 +233,9 @@ private:
         for(size_t i = 0; i < height_; i++)
             data_[i] = buf + i * width_;
     }
+
+    size_t height_, width_;
+    T** data_;
 };
 
 template<typename T>
