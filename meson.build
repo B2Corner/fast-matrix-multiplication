@@ -13,7 +13,8 @@ dependencies += subproject('catch2').get_variable('catch2_with_main_dep')
 test_files = [
     'tests/test_naive.cpp',
     'tests/test_strassen.cpp',
-    'tests/test_shoenhage_simple.cpp'
+    'tests/test_shoenhage_simple.cpp',
+    'tests/test_bitpacking.cpp'
 ]
 executable('test_fmm', test_files, dependencies : dependencies)
 
