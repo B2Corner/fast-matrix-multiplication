@@ -5,9 +5,9 @@
 #include <vector>
 #include <type_traits>
 
-/// Special algorithm for boolean matrices, uses bit-packing to achieve O(n^3/w) complexity, where w is the machine word size
+/// Special algorithm for boolean matrices, uses bit-packing to achieve O(nkm/w) complexity, where w is the machine word size
 ///
-/// Complexity: O(n^3/w)
+/// Complexity: O(nkm / w)
 /// Extra memory: O(n * k) bits
 template<typename T>
     requires std::is_convertible_v<T, bool>

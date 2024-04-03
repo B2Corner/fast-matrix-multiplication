@@ -2,11 +2,11 @@
 #include <catch2/benchmark/catch_benchmark.hpp>
 #include <random>
 #include "../src/multipliers/multiplier_naive.h"
-#include "../src/multipliers/multiplier_bitpacking.h"
+#include "../src/multipliers/multiplier_four_russians.h"
 
-TEST_CASE("Bitpacking multiplication stress") {
+TEST_CASE("Four russians multiplication stress") {
     MatrixMultiplierNaive<bool> multiplier_naive;
-    MatrixMultiplierBitPacking<bool> multiplier_bitpacking;
+    MatrixMultiplierFourRussians<bool> multiplier_four_russians;
 
     std::uniform_int_distribution<size_t> dimensions_distrib(1, 100);
     std::uniform_int_distribution<int32_t> elems_distrib(0, 99);
@@ -28,12 +28,12 @@ TEST_CASE("Bitpacking multiplication stress") {
                 m2[i][j] = elems_distrib(rng) < percent_of_ones;
 
         Matrix<bool> expected = multiplier_naive.multiply(m1, m2);
-        Matrix<bool> actual = multiplier_bitpacking.multiply(m1, m2);
+        Matrix<bool> actual = multiplier_four_russians.multiply(m1, m2);
         REQUIRE(expected == actual);
     }
 }
 
-TEST_CASE("Bitpacking multiplication benchmark") {
+TEST_CASE("Four russians multiplication benchmark") {
     std::mt19937 rng;
     std::uniform_int_distribution<int32_t> elems_distrib(0, 99);
     const int32_t percent_of_ones = 50;
@@ -56,7 +56,7 @@ TEST_CASE("Bitpacking multiplication benchmark") {
             for(size_t j = 0; j < m; j++)
                 m2[i][j] = elems_distrib(rng) < percent_of_ones;
     };
-    MatrixMultiplierBitPacking<bool> multiplier_bitpacking;
+    MatrixMultiplierFourRussians<bool> multiplier_four_russians;
 
     std::array<size_t, 8> sizes = {64, 128, 256, 512, 1024, 2048, 4096, 8192};
     for(size_t size : sizes) {
@@ -65,7 +65,7 @@ TEST_CASE("Bitpacking multiplication benchmark") {
 
         setup_square(size);
         BENCHMARK(benchmark_name.c_str()) {
-            return multiplier_bitpacking.multiply(m1, m2);
+            return multiplier_four_russians.multiply(m1, m2);
         };
     }
 }

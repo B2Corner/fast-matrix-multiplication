@@ -14,7 +14,8 @@ test_files = [
     'tests/test_naive.cpp',
     'tests/test_strassen.cpp',
     'tests/test_shoenhage_simple.cpp',
-    'tests/test_bitpacking.cpp'
+    'tests/test_bitpacking.cpp',
+    'tests/test_four_russians.cpp'
 ]
 executable('test_fmm', test_files, dependencies : dependencies)
 
