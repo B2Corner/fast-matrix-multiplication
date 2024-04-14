@@ -29,6 +29,14 @@ public:
             }
     }
 
+    void multiply_tiles_subtract(MatrixTile<T> res, const MatrixTile<T>& m1, const MatrixTile<T>& m2) {
+        for(size_t i = 0; i < m1.get_height(); i++)
+            for(size_t j = 0; j < m1.get_width(); j++) {
+                for(size_t k = 0; k < m2.get_width(); k++)
+                    res[i][k] -= m1[i][j] * m2[j][k];
+            }
+    }
+
     size_t estimate_multiplications(size_t n, size_t k, size_t m) override {
         return n * k * m;
     }

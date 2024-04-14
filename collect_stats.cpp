@@ -3,6 +3,7 @@
 #include "src/multipliers/multiplier_naive.h"
 #include "src/multipliers/multiplier_shoenhage_simple.h"
 #include "src/multipliers/multiplier_strassen.h"
+#include "src/multipliers/multiplier_bilinear_aggregation.h"
 
 namespace {
 
@@ -35,6 +36,7 @@ int main() {
     MatrixMultiplierNaive<int32_t> multiplier_naive;
     MatrixMultiplierStrassen<int32_t> multiplier_strassen;
     MatrixMultiplierShoenhageSimple<int32_t> multiplier_shoenhage_simple;
+    MatrixMultiplierBilinearAggregation<int32_t> multiplier_bilinear_aggregation;
 
     std::cout << std::setprecision(6);
 
@@ -64,5 +66,14 @@ int main() {
     output_estimation_table_row(multiplier_shoenhage_simple, 10000, 7);
     output_estimation_table_row(multiplier_shoenhage_simple, 100000, 7);
     output_estimation_table_row(multiplier_shoenhage_simple, 1000000, 7);
+    std::cout << std::endl;
+
+    std::cout << "Estimations for bilinear aggregations multiplier (square matrices)" << std::endl;
+    std::cout << "n       | number of element multiplications | ratio w/ naive" << std::endl;
+    output_estimation_table_row(multiplier_bilinear_aggregation, 100, 7);
+    output_estimation_table_row(multiplier_bilinear_aggregation, 1000, 7);
+    output_estimation_table_row(multiplier_bilinear_aggregation, 10000, 7);
+    output_estimation_table_row(multiplier_bilinear_aggregation, 100000, 7);
+    output_estimation_table_row(multiplier_bilinear_aggregation, 1000000, 7);
     std::cout << std::endl;
 }

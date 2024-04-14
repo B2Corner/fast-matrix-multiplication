@@ -59,10 +59,12 @@ public:
     }
 
     MatrixTile<T> get_tile(size_t row0, size_t col0, size_t tile_height, size_t tile_width) {
+        assert(row0 < height_ && col0 < width_ && row0 + tile_height <= height_ && col0 + tile_width <= width_);
         return {tile_height, tile_width, data_ + row0, hor_shift_ + col0};
     }
 
     const MatrixTile<T> get_tile(size_t row0, size_t col0, size_t tile_height, size_t tile_width) const {
+        assert(row0 < height_ && col0 < width_ && row0 + tile_height <= height_ && col0 + tile_width <= width_);
         return {tile_height, tile_width, data_ + row0, hor_shift_ + col0};
     }
 
@@ -172,7 +174,7 @@ public:
 
         for(size_t i = 0; i < height_; i++)
             for(size_t j = 0; j < width_; j++)
-                data_[i][j] == other.data_[i][j];
+                data_[i][j] = other.data_[i][j];
     }
 
     Matrix(Matrix&& other) noexcept : Matrix() {
@@ -197,6 +199,25 @@ public:
                 if(data_[i][j] != other[i][j])
                     return false;
         return true;
+    }
+
+    Matrix& operator+=(const MatrixTile<T> other) {
+        assert(width_ == other.get_width());
+        assert(height_ == other.get_height());
+
+        for(size_t i = 0; i < height_; i++)
+            for(size_t j = 0; j < width_; j++)
+                data_[i][j] += other[i][j];
+
+        return *this;
+    }
+
+    Matrix& operator+=(const Matrix& other) {
+        return operator+=(other.get_tile(0, 0, other.height_, other.width_));
+    }
+
+    MatrixTile<T> get_tile() const {
+        return get_tile(0, 0, height_, width_);
     }
 
     MatrixTile<T> get_tile(size_t row0, size_t col0, size_t tile_height, size_t tile_width) const {
@@ -243,7 +264,7 @@ private:
 };
 
 template<typename T>
-void add_tiles(MatrixTile<T>& t1, const MatrixTile<T>& t2) {
+void add_tiles(MatrixTile<T> t1, const MatrixTile<T> t2) {
     assert(t1.get_width() == t2.get_width());
     assert(t1.get_height() == t2.get_height());
 
@@ -253,7 +274,7 @@ void add_tiles(MatrixTile<T>& t1, const MatrixTile<T>& t2) {
 }
 
 template<typename T>
-void add_tiles(MatrixTile<T>& res, const MatrixTile<T>& t1, const MatrixTile<T>& t2) {
+void add_tiles(MatrixTile<T> res, const MatrixTile<T> t1, const MatrixTile<T> t2) {
     assert(t1.get_width() == t2.get_width());
     assert(t1.get_height() == t2.get_height());
     assert(t1.get_width() == res.get_width());
@@ -265,7 +286,27 @@ void add_tiles(MatrixTile<T>& res, const MatrixTile<T>& t1, const MatrixTile<T>&
 }
 
 template<typename T>
-void subtract_tiles(MatrixTile<T>& t1, const MatrixTile<T>& t2) {
+void add(MatrixTile<T> t1, const Matrix<T>& t2) {
+    add_tiles(t1, t2.get_tile(0, 0, t2.get_height(), t2.get_width()));
+}
+
+template<typename T>
+void add(MatrixTile<T> res, const MatrixTile<T> t1, const Matrix<T>& t2) {
+    add_tiles(res, t1, t2.get_tile(0, 0, t2.get_height(), t2.get_width()));
+}
+
+template<typename T>
+void add(MatrixTile<T> res, const Matrix<T>& t1, const MatrixTile<T> t2) {
+    add_tiles(res, t1.get_tile(0, 0, t1.get_height(), t1.get_width()), t2);
+}
+
+template<typename T>
+void add(MatrixTile<T> res, const Matrix<T>& t1, const Matrix<T>& t2) {
+    add_tiles(res, t1.get_tile(0, 0, t1.get_height(), t1.get_width()), t2.get_tile(0, 0, t2.get_height(), t2.get_width()));
+}
+
+template<typename T>
+void subtract_tiles(MatrixTile<T> t1, const MatrixTile<T> t2) {
     assert(t1.get_width() == t2.get_width());
     assert(t1.get_height() == t2.get_height());
 
@@ -275,7 +316,7 @@ void subtract_tiles(MatrixTile<T>& t1, const MatrixTile<T>& t2) {
 }
 
 template<typename T>
-void subtract_tiles(MatrixTile<T>& res, const MatrixTile<T>& t1, const MatrixTile<T>& t2) {
+void subtract_tiles(MatrixTile<T> res, const MatrixTile<T> t1, const MatrixTile<T> t2) {
     assert(t1.get_width() == t2.get_width());
     assert(t1.get_height() == t2.get_height());
     assert(t1.get_width() == res.get_width());
@@ -287,7 +328,12 @@ void subtract_tiles(MatrixTile<T>& res, const MatrixTile<T>& t1, const MatrixTil
 }
 
 template<typename T>
-void copy_tile(MatrixTile<T>& res, const MatrixTile<T>& t) {
+void subtract(MatrixTile<T> t1, const Matrix<T>& t2) {
+    subtract_tiles(t1, t2.get_tile(0, 0, t2.get_height(), t2.get_width()));
+}
+
+template<typename T>
+void copy_tile(MatrixTile<T> res, const MatrixTile<T> t) {
     assert(t.get_width() == res.get_width());
     assert(t.get_height() == res.get_height());
 
