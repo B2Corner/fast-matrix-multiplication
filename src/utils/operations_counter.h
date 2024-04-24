@@ -15,6 +15,10 @@ public:
     OperationsCounter(const T& val) : val_(val) {
     }
 
+    OperationsCounter operator-() const {
+        return {-val_};
+    }
+
     OperationsCounter operator+(const OperationsCounter& other) const {
         return {val_ + other.val_};
     }

@@ -4,6 +4,8 @@
 #include "src/multipliers/multiplier_shoenhage_simple.h"
 #include "src/multipliers/multiplier_strassen.h"
 #include "src/multipliers/multiplier_bilinear_aggregation.h"
+#include "src/multipliers/multiplier_tensors.h"
+#include "src/utils/tensor_decompositions.h"
 
 namespace {
 
@@ -37,6 +39,7 @@ int main() {
     MatrixMultiplierStrassen<int32_t> multiplier_strassen;
     MatrixMultiplierShoenhageSimple<int32_t> multiplier_shoenhage_simple;
     MatrixMultiplierBilinearAggregation<int32_t> multiplier_bilinear_aggregation;
+    MatrixMultiplierTensors<int32_t, int32_t> multiplier_tensors({tensor_2x2x2, tensor_2x3x3});
 
     std::cout << std::setprecision(6);
 
@@ -75,5 +78,14 @@ int main() {
     output_estimation_table_row(multiplier_bilinear_aggregation, 10000, 7);
     output_estimation_table_row(multiplier_bilinear_aggregation, 100000, 7);
     output_estimation_table_row(multiplier_bilinear_aggregation, 1000000, 7);
+    std::cout << std::endl;
+
+    std::cout << "Estimations for tensor decompositions multiplier (square matrices)" << std::endl;
+    std::cout << "n       | number of element multiplications | ratio w/ naive" << std::endl;
+    output_estimation_table_row(multiplier_tensors, 100, 7);
+    output_estimation_table_row(multiplier_tensors, 1000, 7);
+    output_estimation_table_row(multiplier_tensors, 10000, 7);
+    output_estimation_table_row(multiplier_tensors, 100000, 7);
+    output_estimation_table_row(multiplier_tensors, 1000000, 7);
     std::cout << std::endl;
 }

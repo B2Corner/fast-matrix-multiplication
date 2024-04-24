@@ -16,7 +16,8 @@ test_files = [
     'tests/test_shoenhage_simple.cpp',
     'tests/test_bitpacking.cpp',
     'tests/test_four_russians.cpp',
-    'tests/test_bilinear_aggregation.cpp'
+    'tests/test_bilinear_aggregation.cpp',
+    'tests/test_tensors.cpp'
 ]
 executable('test_fmm', test_files, dependencies : dependencies)
 
